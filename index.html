@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StarlinkVPN — Download</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="starlinkvpn.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #06101f;
+      --teal:       #2ec4b0;
+      --teal-light: #3dd8c0;
+      --yellow:     #f5e04a;
+      --blue:       #1b6fba;
+      --blue-light: #4aa5e0;
+      --text:       #ddeef8;
+      --muted:      #5e85a0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* ── Ambient background ── */
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(140px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-orb-teal  { width: 500px; height: 500px; background: radial-gradient(circle, rgba(46,196,176,0.16), transparent 70%); top: -160px; left: -160px; }
+    .bg-orb-blue  { width: 460px; height: 460px; background: radial-gradient(circle, rgba(26,111,186,0.20), transparent 70%); bottom: -140px; right: -140px; }
+    .bg-orb-mid   { width: 360px; height: 360px; background: radial-gradient(circle, rgba(245,224,74,0.05), transparent 70%); top: 38%; left: 48%; transform: translate(-50%,-50%); }
+
+    /* ── Navbar ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      padding: 0 20px;
+      background: rgba(6,16,31,0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(61,216,192,0.13);
+      box-shadow: 0 1px 0 rgba(61,216,192,0.06), 0 4px 32px rgba(0,0,0,0.40);
+    }
+
+    body { padding-top: 74px; }
+
+    .nav-inner {
+      width: 100%;
+      max-width: 960px;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-logo {
+      width: 41px; height: 41px;
+      border-radius: 11px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(61,216,192,0.22), 0 0 18px rgba(46,196,176,0.40);
+    }
+    .nav-logo img { width: 41px; height: 41px; object-fit: contain; display: block; }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .nav-title {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-size: 1.14rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      background: linear-gradient(105deg, var(--teal-light), var(--yellow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .nav-tagline {
+      font-size: 0.71rem;
+      color: var(--muted);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      line-height: 1;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      background: rgba(46,196,176,0.10);
+      border: 1px solid rgba(46,196,176,0.25);
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--teal-light);
+      letter-spacing: 0.04em;
+    }
+    .nav-badge span.dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--teal-light);
+      box-shadow: 0 0 8px var(--teal-light);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.35; }
+    }
+
+    /* ── Page section heading ── */
+    .section-heading {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 920px;
+      padding: 28px 20px 0;
+    }
+    .section-heading h2 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .section-heading h2 span {
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--muted);
+      vertical-align: middle;
+      margin-right: 10px;
+      opacity: 0.5;
+    }
+
+    /* ── Main grid ── */
+    main {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 920px;
+      padding: 16px 20px 48px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+    }
+
+    /* ── Card ── */
+    .card {
+      border-radius: 18px;
+      padding: 20px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.30s cubic-bezier(.22,1,.36,1), box-shadow 0.30s;
+    }
+
+    /* glossy top-shine */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 52%;
+      border-radius: 22px 22px 60% 60% / 22px 22px 40% 40%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.01) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* gradient border */
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.5px;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .card > * { position: relative; z-index: 4; }
+
+    .card-teal {
+      background: linear-gradient(145deg, #0e2535 0%, #091c2a 50%, #071520 100%);
+      box-shadow:
+        0 0 0 1px rgba(61,216,192,0.18),
+        0 4px 32px rgba(46,196,176,0.14),
+        inset 0 1px 0 rgba(61,216,192,0.18),
+        inset 0 -1px 0 rgba(0,0,0,0.30);
+    }
+    .card-teal::after {
+      background: linear-gradient(130deg, rgba(61,216,192,0.65) 0%, rgba(245,224,74,0.25) 50%, transparent 70%);
+    }
+    .card-teal:hover {
+      transform: translateY(-6px) scale(1.007);
+      box-shadow:
+        0 0 0 1px rgba(61,216,192,0.30),
+        0 28px 64px rgba(46,196,176,0.22),
+        inset 0 1px 0 rgba(61,216,192,0.22);
+    }
+
+    .card-blue {
+      background: linear-gradient(145deg, #0a1e35 0%, #071528 50%, #050d1e 100%);
+      box-shadow:
+        0 0 0 1px rgba(74,165,224,0.18),
+        0 4px 32px rgba(26,111,186,0.14),
+        inset 0 1px 0 rgba(74,165,224,0.18),
+        inset 0 -1px 0 rgba(0,0,0,0.30);
+    }
+    .card-blue::after {
+      background: linear-gradient(130deg, rgba(74,165,224,0.65) 0%, rgba(26,111,186,0.20) 50%, transparent 70%);
+    }
+    .card-blue:hover {
+      transform: translateY(-6px) scale(1.007);
+      box-shadow:
+        0 0 0 1px rgba(74,165,224,0.30),
+        0 28px 64px rgba(26,111,186,0.24),
+        inset 0 1px 0 rgba(74,165,224,0.22);
+    }
+
+    /* ── Card header ── */
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .app-icon-wrap {
+      flex-shrink: 0;
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+    .app-icon-wrap img {
+      width: 52px; height: 52px;
+      object-fit: contain;
+      display: block;
+      border-radius: 14px;
+    }
+
+    .card-teal .app-icon-wrap {
+      box-shadow: 0 0 0 1.5px rgba(61,216,192,0.35), 0 0 28px rgba(46,196,176,0.50), inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+    .card-blue .app-icon-wrap {
+      box-shadow: 0 0 0 1.5px rgba(74,165,224,0.35), 0 0 28px rgba(26,111,186,0.50), inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    .app-meta { flex: 1; min-width: 0; }
+    .app-name {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .app-subtitle {
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    /* ── Meta strip (replaces stats-row) ── */
+    .meta-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .meta-item svg { width: 12px; height: 12px; opacity: 0.75; flex-shrink: 0; }
+    .meta-sep {
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--muted);
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+    .card-teal .meta-item {
+      background: linear-gradient(145deg, rgba(46,196,176,0.13), rgba(46,196,176,0.05));
+      border: 1px solid rgba(61,216,192,0.22);
+      color: var(--teal-light);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .card-blue .meta-item {
+      background: linear-gradient(145deg, rgba(74,165,224,0.13), rgba(74,165,224,0.05));
+      border: 1px solid rgba(74,165,224,0.22);
+      color: var(--blue-light);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+
+
+    /* ── Download button ── */
+    .btn-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      padding: 12px 18px;
+      border-radius: 11px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.025em;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: filter 0.2s, transform 0.18s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-download::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .btn-teal {
+      background: linear-gradient(115deg, #25b09e 0%, var(--teal-light) 55%, #d4c930 130%);
+      color: #05161f;
+      box-shadow: 0 4px 24px rgba(46,196,176,0.38);
+    }
+    .btn-teal:hover { filter: brightness(1.09); transform: translateY(-1px); box-shadow: 0 10px 36px rgba(46,196,176,0.52); }
+
+    .btn-blue {
+      background: linear-gradient(115deg, #155fa0 0%, var(--blue-light) 100%);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(26,111,186,0.38);
+    }
+    .btn-blue:hover { filter: brightness(1.10); transform: translateY(-1px); box-shadow: 0 10px 36px rgba(26,111,186,0.52); }
+
+    .btn-download:active { transform: scale(0.96); filter: brightness(0.93); transition: transform 0.08s, filter 0.08s; }
+    .btn-download svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+    /* shimmer sweep on hover */
+    .btn-download::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 55%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      transform: translateX(-200%);
+      pointer-events: none;
+      z-index: 3;
+    }
+    .btn-download:hover::after {
+      transform: translateX(360%);
+      transition: transform 0.60s ease;
+    }
+
+    /* ripple on click */
+    .ripple {
+      position: absolute;
+      width: 0; height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      transform: translate(-50%, -50%);
+      animation: rippleOut 0.65s ease-out forwards;
+      pointer-events: none;
+      z-index: 10;
+    }
+    @keyframes rippleOut { to { width: 340px; height: 340px; opacity: 0; } }
+
+    /* spinner + downloading state */
+    .btn-spinner {
+      display: none;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.28);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: btnSpin 0.75s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes btnSpin { to { transform: rotate(360deg); } }
+    .btn-download.is-downloading { pointer-events: none; opacity: 0.87; }
+    .btn-download.is-downloading .btn-icon { display: none; }
+    .btn-download.is-downloading .btn-spinner { display: block; }
+
+    /* hint text below button */
+    .btn-wrapper { display: flex; flex-direction: column; gap: 8px; }
+    .btn-hint {
+      text-align: center;
+      font-size: 0.70rem;
+      color: var(--muted);
+      letter-spacing: 0.025em;
+      font-weight: 400;
+      opacity: 0.60;
+      transition: color 0.35s, opacity 0.35s;
+    }
+    .card-teal .btn-hint.is-downloading { color: var(--teal-light); opacity: 0.88; }
+    .card-blue .btn-hint.is-downloading { color: var(--blue-light); opacity: 0.88; }
+
+    /* ── Footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 0 24px 32px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .footer-copy {
+      font-size: 0.74rem;
+      color: var(--muted);
+      opacity: 0.65;
+    }
+    .footer-version {
+      font-size: 0.66rem;
+      color: var(--muted);
+      opacity: 0.38;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 520px) {
+      body { padding-top: 74px; }
+      nav { padding: 0 14px; }
+      main { padding: 16px 14px 48px; gap: 28px; grid-template-columns: 1fr; }
+      .card { padding: 18px 16px 16px; gap: 13px; }
+      .section-heading { padding: 20px 14px 0; }
+      .nav-tagline { font-size: 0.62rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-orb bg-orb-teal"></div>
+  <div class="bg-orb bg-orb-blue"></div>
+  <div class="bg-orb bg-orb-mid"></div>
+
+  <!-- ── Navbar ── -->
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo"><img src="starlinkvpn.png" alt="StarlinkVPN" /></div>
+      <div class="nav-brand">
+        <span class="nav-title">STARLINK</span>
+        <span class="nav-tagline">Fast, secure &amp; private</span>
+      </div>
+      <div class="nav-badge">
+        <span class="dot"></span>
+        Stable
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Section label ── -->
+  <div class="section-heading">
+    <h2><span></span>Download our application</h2>
+  </div>
+
+  <!-- ── Cards ── -->
+  <main>
+
+    <!-- Card 1: StarlinkVPN -->
+    <div class="card card-teal">
+      <div class="card-header">
+        <div class="app-icon-wrap">
+          <img src="starlinkvpn.png" alt="StarlinkVPN" />
+        </div>
+        <div class="app-meta">
+          <div class="app-name">StarLink VPN</div>
+          <div class="app-subtitle">Standard Edition &nbsp;·&nbsp; Android APK</div>
+        </div>
+      </div>
+
+      <div class="meta-strip">
+        <div class="meta-item">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 1v7M3 5l3 3 3-3"/><path d="M1 10h10"/></svg>
+          62.6 MB
+        </div>
+        <div class="meta-sep"></div>
+        <div class="meta-item">
+          <svg viewBox="0 0 12 12" fill="currentColor"><path d="M2.5 4.5C2.5 2.57 4.07 1 6 1s3.5 1.57 3.5 3.5v.5h.5a1 1 0 0 1 0 2H1.5a1 1 0 0 1 0-2h.5v-.5ZM4 8h4v1.5A1.5 1.5 0 0 1 6.5 11h-1A1.5 1.5 0 0 1 4 9.5V8Z"/></svg>
+          Android
+        </div>
+        <div class="meta-sep"></div>
+        <div class="meta-item meta-item-stable">
+          <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>
+          Stable Release
+        </div>
+      </div>
+
+      <div class="btn-wrapper">
+        <a class="btn-download btn-teal"
+          href="https://github.com/FixBuildCreation/StarlinkVpn/releases/download/stable/app.fixbuild.StarlinkVPN-release.apk"
+          download onclick="createRipple(event,this);startDownload(this);">
+          <svg class="btn-icon" viewBox="0 0 17 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8.5 2v9M5 7.5l3.5 3.5 3.5-3.5"/><path d="M2 14h13"/>
+          </svg>
+          <span class="btn-label">Download APK</span>
+          <span class="btn-spinner"></span>
+        </a>
+        <p class="btn-hint">Free &middot; Direct APK</p>
+      </div>
+    </div>
+
+    <!-- Card 2: StarlinkV2RayN -->
+    <div class="card card-blue">
+      <div class="card-header">
+        <div class="app-icon-wrap">
+          <img src="starlinkv2rayn.png" alt="StarlinkV2RayN" />
+        </div>
+        <div class="app-meta">
+          <div class="app-name">StarLink V2RayN</div>
+          <div class="app-subtitle">V2Ray Edition &nbsp;·&nbsp; Android APK</div>
+        </div>
+      </div>
+
+      <div class="meta-strip">
+        <div class="meta-item">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 1v7M3 5l3 3 3-3"/><path d="M1 10h10"/></svg>
+          74.7 MB
+        </div>
+        <div class="meta-sep"></div>
+        <div class="meta-item">
+          <svg viewBox="0 0 12 12" fill="currentColor"><path d="M2.5 4.5C2.5 2.57 4.07 1 6 1s3.5 1.57 3.5 3.5v.5h.5a1 1 0 0 1 0 2H1.5a1 1 0 0 1 0-2h.5v-.5ZM4 8h4v1.5A1.5 1.5 0 0 1 6.5 11h-1A1.5 1.5 0 0 1 4 9.5V8Z"/></svg>
+          Android
+        </div>
+        <div class="meta-sep"></div>
+        <div class="meta-item meta-item-stable">
+          <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>
+          Stable Release
+        </div>
+      </div>
+
+      <div class="btn-wrapper">
+        <a class="btn-download btn-blue"
+          href="https://github.com/FixBuildCreation/StarlinkVpn/releases/download/stable/app.fixbuild.vpncore.StarlinkV2RayN-release.apk"
+          download onclick="createRipple(event,this);startDownload(this);">
+          <svg class="btn-icon" viewBox="0 0 17 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8.5 2v9M5 7.5l3.5 3.5 3.5-3.5"/><path d="M2 14h13"/>
+          </svg>
+          <span class="btn-label">Download APK</span>
+          <span class="btn-spinner"></span>
+        </a>
+        <p class="btn-hint">Free &middot; Direct APK</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p class="footer-copy">&copy; 2026 FixBuild. All rights reserved.</p>
+    <p class="footer-version">StarlinkVPN &nbsp;&middot;&nbsp; Version 1.0</p>
+  </footer>
+
+
+  <script>
+    function startDownload(btn) {
+      var hint = btn.closest('.btn-wrapper').querySelector('.btn-hint');
+      btn.classList.add('is-downloading');
+      btn.querySelector('.btn-label').textContent = 'Downloading\u2026';
+      hint.textContent = 'Download started \u2014 check your notifications';
+      hint.classList.add('is-downloading');
+      setTimeout(function () {
+        btn.classList.remove('is-downloading');
+        btn.querySelector('.btn-label').textContent = 'Download APK';
+        hint.textContent = 'Free \u00b7 Direct APK \u00b7 No account required';
+        hint.classList.remove('is-downloading');
+      }, 5000);
+    }
+    function createRipple(e, btn) {
+      var rect = btn.getBoundingClientRect();
+      var r = document.createElement('span');
+      r.className = 'ripple';
+      r.style.left = (e.clientX - rect.left) + 'px';
+      r.style.top = (e.clientY - rect.top) + 'px';
+      btn.appendChild(r);
+      setTimeout(function () { r.remove(); }, 700);
+    }
+  </script>
+</body>
+</html>

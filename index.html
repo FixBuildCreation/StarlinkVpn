@@ -528,7 +528,7 @@
       <div class="btn-wrapper">
         <a class="btn-download btn-teal"
           href="https://github.com/FixBuildCreation/StarlinkVpn/releases/download/stable/app.fixbuild.StarlinkVPN-release.apk"
-          download onclick="createRipple(event,this);startDownload(this);">
+          onclick="createRipple(event,this);startDownload(this,'https://github.com/FixBuildCreation/StarlinkVpn/releases/download/stable/app.fixbuild.StarlinkVPN-release.apk');return false;">
           <svg class="btn-icon" viewBox="0 0 17 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M8.5 2v9M5 7.5l3.5 3.5 3.5-3.5"/><path d="M2 14h13"/>
           </svg>
@@ -571,7 +571,7 @@
       <div class="btn-wrapper">
         <a class="btn-download btn-blue"
           href="https://github.com/FixBuildCreation/StarlinkVpn/releases/download/stable/app.fixbuild.vpncore.StarlinkV2RayN-release.apk"
-          download onclick="createRipple(event,this);startDownload(this);">
+          onclick="createRipple(event,this);startDownload(this,'https://github.com/FixBuildCreation/StarlinkVpn/releases/download/stable/app.fixbuild.vpncore.StarlinkV2RayN-release.apk');return false;">
           <svg class="btn-icon" viewBox="0 0 17 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M8.5 2v9M5 7.5l3.5 3.5 3.5-3.5"/><path d="M2 14h13"/>
           </svg>
@@ -586,12 +586,13 @@
 
   <footer>
     <p class="footer-copy">&copy; 2026 FixBuild. All rights reserved.</p>
-    <p class="footer-version">StarlinkVPN &nbsp;&middot;&nbsp; Version 1.0</p>
+    <p class="footer-version">StarlinkVPN &nbsp;&middot;&nbsp; Version 1.1</p>
   </footer>
 
 
   <script>
-    function startDownload(btn) {
+    function startDownload(btn, url) {
+      window.location.href = url;
       var hint = btn.closest('.btn-wrapper').querySelector('.btn-hint');
       btn.classList.add('is-downloading');
       btn.querySelector('.btn-label').textContent = 'Downloading\u2026';
@@ -600,7 +601,7 @@
       setTimeout(function () {
         btn.classList.remove('is-downloading');
         btn.querySelector('.btn-label').textContent = 'Download APK';
-        hint.textContent = 'Free \u00b7 Direct APK \u00b7 No account required';
+        hint.textContent = 'Free \u00b7 Direct APK';
         hint.classList.remove('is-downloading');
       }, 5000);
     }

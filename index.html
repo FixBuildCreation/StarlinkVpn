@@ -586,18 +586,30 @@
 
   <footer>
     <p class="footer-copy">&copy; 2026 FixBuild. All rights reserved.</p>
-    <p class="footer-version">StarlinkVPN &nbsp;&middot;&nbsp; Version 1.1</p>
+    <p class="footer-version">StarlinkVPN &nbsp;&middot;&nbsp; Version 1.2</p>
   </footer>
 
 
-  <script>
+<script>
     function startDownload(btn, url) {
-      window.location.href = url;
+      var tempLink = document.createElement('a');
+      tempLink.style.display = 'none';
+      tempLink.href = url;
+      tempLink.setAttribute('download', ''); 
+      
+
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
+
+
       var hint = btn.closest('.btn-wrapper').querySelector('.btn-hint');
       btn.classList.add('is-downloading');
       btn.querySelector('.btn-label').textContent = 'Downloading\u2026';
       hint.textContent = 'Download started \u2014 check your notifications';
       hint.classList.add('is-downloading');
+      
+
       setTimeout(function () {
         btn.classList.remove('is-downloading');
         btn.querySelector('.btn-label').textContent = 'Download APK';
@@ -605,6 +617,7 @@
         hint.classList.remove('is-downloading');
       }, 5000);
     }
+
     function createRipple(e, btn) {
       var rect = btn.getBoundingClientRect();
       var r = document.createElement('span');
